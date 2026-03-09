@@ -24,7 +24,7 @@
         <textarea name="description" id="description" class="form-control">{{ old('description') }}</textarea>
     </div>
     <button type="submit" class="btn btn-md btn-primary me-3">Save</button>
-     <button type="reset" class="btn btn-md btn-primary me-3">Reset</button>
+     <button type="reset" class="btn btn-md btn-primary me-3">Reset Form</button>
 </form>
 </div>
 @endsection
