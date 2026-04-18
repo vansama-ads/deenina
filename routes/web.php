@@ -1,10 +1,29 @@
 <?php
 
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ChapterController;
 
 Route::get('/', function () {
     return view('welcome');
-})->name('welcome');
+});
 
-Route::resource('chapters', ChapterController::class);
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+// Admin Routes
+Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
+    Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
+    Route::get('/admin/users', [AdminController::class, 'users'])->name('admin.users');
+    Route::post('/admin/users/{user}/promote', [AdminController::class, 'promoteToAdmin'])->name('admin.users.promote');
+    Route::post('/admin/users/{user}/demote', [AdminController::class, 'demoteToUser'])->name('admin.users.demote');
+});
+
+require __DIR__.'/auth.php';
